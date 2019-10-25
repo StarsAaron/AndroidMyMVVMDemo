@@ -1,0 +1,18 @@
+############## Rxbus 使用 ########################
+
+Disposable mSubscription = RxBus.getDefault().toObservable(DownLoadStateBean.class)
+        .observeOn(AndroidSchedulers.mainThread()) //回调到主线程更新UI
+        .subscribe(new Consumer<DownLoadStateBean>() {
+            @Override
+            public void accept(final DownLoadStateBean progressLoadBean) throws Exception {
+                progress(progressLoadBean.getBytesLoaded(), progressLoadBean.getTotal());
+            }
+        });
+//将订阅者加入管理站
+RxSubscriptions.add(mSubscription);
+
+// 取消订阅
+RxSubscriptions.remove(mSubscription);
+
+RxBus.getDefault().post(new DownLoadStateBean(contentLength(), bytesReaded, tag));
+

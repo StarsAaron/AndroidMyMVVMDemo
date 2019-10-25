@@ -1,0 +1,2 @@
+include ':app', ':mvvmlibrary', ':widgetlibrary', ':netlibrary', ':baselibrary', ':utilslibrary'
+rootProject.name='AndroidMyMVVMDemo'

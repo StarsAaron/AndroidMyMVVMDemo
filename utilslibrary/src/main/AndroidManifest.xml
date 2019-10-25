@@ -1,0 +1,16 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.aaron.utilslibrary" >
+    <application>
+        <!-- 崩溃界面 -->
+        <activity
+            android:name=".crash.DefaultErrorActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:process=":crash"
+            android:screenOrientation="portrait"/>
+        <provider
+            android:name=".crash.CaocInitProvider"
+            android:authorities="${applicationId}.customactivityoncrashinitprovider"
+            android:exported="false"
+            android:initOrder="101" />
+    </application>
+</manifest>

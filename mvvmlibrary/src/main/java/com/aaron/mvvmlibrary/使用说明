@@ -1,0 +1,178 @@
+***********************************************************
+* <功能列表>
+* binding包 --- 控件绑定自定义扩展
+* utils包   --- 常用工具
+***********************************************************
+LiveData（双向绑定）+Retrofit+Rxjava 实现的MVVM模式基础框架
+***********************************************************
+
+使用双向绑定环境配置：
+在对应 Model 的 build.gradle 文件里加入以下代码，同步后就能引入对 DataBinding 的支持
+android {
+    dataBinding {
+        enabled = true
+    }
+}
+Alt+Enter，选择“Convert to data binding layout”，就可以生成 DataBinding 需要的布局规则
+java.lang.* 包中的类会被自动导入，所以可以直接使用
+
+##########################################################################
+## 继承BaseViewModel，自动管理生命周期，数据双向绑定
+在继承BaseViewModel的ViewModel类订阅中调用Observable的doOnSubscribe(CurrentViewModel.this)就可以
+跟ViewModel生命周期绑定。绑定之后，在Viewmodel的生命周期结束回调onCleared方法销毁所有的订阅。
+model.loadMore()
+    .compose(RxUtils.schedulersTransformer()) //线程调度
+    .doOnSubscribe(NetWorkViewModel.this) //请求与ViewModel周期同步
+    .subscribe()
+
+############################################################################
+## 继承BaseActivity,BaseFragment 提供响应ViewModel的基础对话框，页面跳转，
+class LoginActivity : BaseMVVMActivity<ActivityLoginBinding, LoginViewModel>{
+    override fun f_getLayoutId(): Int {
+        return R.layout.activity_login // 返回布局ID
+    }
+
+    override fun f_isRequestFullScreen(): Boolean {
+        return true // 全屏
+    }
+
+    // 其它常见方法
+    override fun f_initOnCreateFirstParam(){// OnCreate方法中首先执行的代码}
+    override fun f_initViewObservable() {} // 初始化监听
+    override fun f_initData() {} // 初始化页面数据
+    ...
+}
+
+class BuyFragment : BaseMVVMFragment<FragmentBuyBinding, BuyViewModel>(){
+    override fun initVariableId(): Int {
+        return BR.buyViewModel // 初始化ViewModel的id
+    }
+
+    override fun f_getLayoutId(
+        inflater: LayoutInflater?,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): Int {
+        return R.layout.fragment_buy // 初始化根布局
+    }
+}
+
+可选择重写initViewModel方法提供自定义的viewmodel初始化类
+override fun initViewModel(): BuyViewModel? {
+    val factory: AppViewModelFactory? = activity?.application?.let {
+        AppViewModelFactory.getInstance(it)
+    }
+    return ViewModelProviders.of(this, factory).get(BuyViewModel::class.java)
+}
+
+#############################################################################
+## 自定义的控件事件绑定
+添加命名空间 xmlns:binding="http://schemas.android.com/apk/res-auto"到根元素
+
+<Button
+     android:id="@+id/button"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:background="@drawable/redtheme_button_bg"
+     android:text="登录"
+     binding:onClickCommand="@{loginViewModel.loginOnClickCommand}" />
+
+使用 binding:onClickCommand 触发自定义点击事件，这个点击事件添加了防止点击过快的功能。
+如果不开启防止过快点击可以设置 binding:isThrottleFirst=true
+var loginOnClickCommand = BindingCommand<Any?>(BindingAction {
+      ...
+})
+包含了其它常用控件的绑定封装，详情看binging包源码
+
+#################### 一个页面对应多个ViewModel 继承MultiBaseActivity或 MultiBaseFragment###############
+class MainActivity : MultiBaseMVVMActivity<ActivityMainBinding>() {
+    override fun f_getLayoutId(): Int {
+        return R.layout.activity_main2
+    }
+
+    /**
+     * 绑定ViewModel
+     * @param map
+     * 设置绑定映射，key为xml文件中的变量名，value为ViewModel
+     * 传入格式为 <BR.variableName></BR.variableName>,vm extends BaseViewModel>
+     */
+    override fun f_initViewModelList(viewModelBindinglist: ArrayList<ViewModelData>?) {
+        viewModelBindinglist?.add(
+            ViewModelData(
+                BR.viewModel,
+                LoginViewModel::class.java
+            )
+        )
+            ?:KLog.w("list: ArrayList<ViewModelData> 为空")
+    }
+
+    // 其它可重写方法
+    override fun f_initData() {}
+    override fun f_isRequestFullScreen(): Boolean { return true }
+    override fun f_initViewObservable() {}
+    ...
+}
+
+########################## 容器Activity ############################################
+盛装Fragment的一个容器(代理)Activity
+普通界面只需要编写Fragment,使用此Activity盛装,这样就不需要每个界面都在AndroidManifest中注册一遍
+
+使用方法：
+在ViewModel中调用BaseViewModel的方法开一个Fragment
+f_startContainerActivity(你的Fragment类名.class.getCanonicalName())
+
+在ViewModel中调用BaseViewModel的方法，携带一个序列化实体打开一个Fragment
+Bundle mBundle = new Bundle();
+mBundle.putParcelable("entity", entity);
+f_startContainerActivity(你的Fragment类名.class.getCanonicalName(), mBundle);
+
+在你的Fragment中取出实体
+Bundle mBundle = getArguments();
+if (mBundle != null) {
+    entity = mBundle.getParcelable("entity");
+}
+
+#################### 注意 ####################################################
+》》》 用LiveData取代ObservableField实现双向绑定步骤
+
+（1）更改gradle版本至alpha06以上，目前最新是alpha07
+buildscript {
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.1.0-alpha07'
+    }
+}
+（2）gradle-wrapper.properties中的distributionUrl最低須為gradle-4.4
+（3）在gradle.properties中啟用V2。
+android.databinding.enableV2=true
+
+原写法：
+// ViewModel
+public final ObservableField<Boolean> isLoading = new ObservableField<>();
+isLoading.set(true);
+
+// View
+binding.setViewModel(viewModel);
+
+新的寫法：
+
+// ViewModel
+public final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+isLoading.postValue(true);
+
+// View
+binding.setViewModel(viewModel);
+binding.setLifecycleOwner(this);
+
+用LiveData取代並加上setLifecycleOwner就讓Data Binding具有lifecycle-aware性質了。
+
+
+》》》 浅谈 ViewModel 的生命周期控制
+当 Activity 处于前台的时候被销毁了，那么得到的 ViewModel 是之前实例过的 ViewModel；如果 Activity 处于后台时被销毁了，那么得到的 ViewModel 不是同一个。举例说，如果 Activity 因为配置发生变化而被重建了，那么当重建的时候，ViewModel 是之前的实例；如果因为长期处于后台而被销毁了，那么重建的时候，ViewModel 就不是之前的实例了。
+https://www.jianshu.com/p/47224fd1088e
+
+
+》》》 注意LiveData的粘性事件
+https://www.jianshu.com/p/e08287ec62cd
+https://www.jianshu.com/p/f69e5f0dba9b
+
+不要多次注册:onCreate里面的注册以后，onResume里面就不要注册了，然后通过判断条件的不同写两个不同的处理方式。
