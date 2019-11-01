@@ -1,23 +1,6 @@
 # AndroidMyMVVMDemo
 使用databinding livedata双向绑定的MVVM模式的通用开发库
 
-## 引入依赖：
-`${latest.version}` is [[V1.0.0]](https://dl.bintray.com/aaronstars/android-library/AndroidBaseMVVMLibrary)
-
-```groovy
-dependencies {
-  implementation 'com.aaron:android-base-MVVM-library:${latest.version}'
-}
-```
-
-## 功能列表
-- base包    --- activity，fragment，application等基础类，提供日志，生命周期，常用工具，databinding双向绑定的支持
-- bus包     --- RxBus实现，viewmodel通信类Messenger
-- binding包 --- 控件绑定自定义扩展
-- crash包   --- 崩溃处理
-- net 包    --- Retrofit+Rxjava网络访问封装
-- utils包   --- 常用工具
-
 ## 自定义BaseApplication子类
 ### 例子：
 
