@@ -1,9 +1,14 @@
 package com.aaron.mymvvm.normalExample.ui.fragment;
 
+import android.os.Bundle;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import com.aaron.mvvmlibrary.base_mvvm.view.MultiBaseMVVMFragment;
 import com.aaron.mvvmlibrary.bean.ViewModelData;
+import com.aaron.mymvvm.BR;
 import com.aaron.mymvvm.R;
 import com.aaron.mymvvm.databinding.FragmentTestABinding;
 import com.aaron.utilslibrary.utils.KLog;
@@ -16,7 +21,18 @@ public final class TestFragmentA extends MultiBaseMVVMFragment<FragmentTestABind
     }
 
     @Override
-    public void f_initData() {
+    public int f_getLayoutId() {
+        return R.layout.fragment_test_a;
+    }
+
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        f_registorUIBinding(com.aaron.mymvvm.BR.testviewmodel,f_getViewModel(TestAViewModel.class));
+
+        f_initViewObservable();
+
         binding.button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -25,8 +41,7 @@ public final class TestFragmentA extends MultiBaseMVVMFragment<FragmentTestABind
         });
     }
 
-    @Override
-    public void f_initViewObservable() {
+    private void f_initViewObservable() {
         TestAViewModel testAViewModel = f_getViewModel(TestAViewModel.class);
         testAViewModel.editTextMsg.observe(this,new Observer<String>(){
             @Override
@@ -42,26 +57,4 @@ public final class TestFragmentA extends MultiBaseMVVMFragment<FragmentTestABind
             }
         });
     }
-
-    /**
-     * 绑定ViewModel
-     *
-     * @param viewModelBindinglist 设置绑定映射，key为xml文件中的变量名，value为ViewModel
-     *                             传入格式为 <BR.variableName,vm extends BaseViewModel>
-     */
-    @Override
-    public void f_initViewModelList(ArrayList<ViewModelData> viewModelBindinglist) {
-        ViewModelData viewModelData = new ViewModelData(com.aaron.mymvvm.BR.testviewmodel, TestAViewModel.class);
-        viewModelBindinglist.add(viewModelData);
-    }
-
-    /**
-     * 初始化根布局
-     * @return 布局layout的id
-     */
-    @Override
-    public int f_getLayoutId() {
-        return R.layout.fragment_test_a;
-    }
-
 }

@@ -56,15 +56,15 @@ dependencies {
     // 标题栏：https://github.com/getActivity/TitleBar
     implementation 'com.hjq:titlebar:6.0'
     // 依赖库
-    implementation 'com.aaron:AndroidBaseMVVMLibrary:1.3.0'
+//    implementation 'com.aaron:AndroidBaseMVVMLibrary:1.3.1'
     implementation 'com.aaron:AndroidBaseWidgetLibrary:1.0.1'
     implementation 'com.aaron:AndroidBaseNetLibrary:1.0.0'
-//    implementation 'com.aaron:AndroidUtilsLibrary:1.0.2'
+    implementation 'com.aaron:AndroidUtilsLibrary:1.0.3'
     implementation 'com.aaron:AndroidBaseLibrary:1.0.0'
 
-//    implementation project(path: ':mvvmlibrary')
+    implementation project(path: ':mvvmlibrary')
 //    implementation project(path: ':widgetlibrary')
 //    implementation project(path: ':netlibrary')
-    implementation project(path: ':utilslibrary')
+//    implementation project(path: ':utilslibrary')
 //    implementation project(path: ':baselibrary')
 }

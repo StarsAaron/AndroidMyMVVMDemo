@@ -27,7 +27,7 @@ import androidx.lifecycle.Observer;
  * https://www.jianshu.com/p/e08287ec62cd'>https://www.jianshu.com/p/e08287ec62cd
  * https://www.jianshu.com/p/f69e5f0dba9b
  */
-public class BaseLiveData<T> extends MutableLiveData<T> {
+public class NoStickyLiveData<T> extends MutableLiveData<T> {
     private final static int START_VERSION = -1;
     int mVersion = START_VERSION;
 
@@ -59,11 +59,11 @@ public class BaseLiveData<T> extends MutableLiveData<T> {
 
     class CustomObserver<T> implements Observer<T> {
         private Observer<? super T> mObserver;
-        private BaseLiveData<T> liveData;
+        private NoStickyLiveData<T> liveData;
         // 通过标志位过滤旧数据
         private int mLastVersion;
 
-        public CustomObserver(Observer<? super T> observer,BaseLiveData<T> liveData) {
+        public CustomObserver(Observer<? super T> observer, NoStickyLiveData<T> liveData) {
             this.mObserver = observer;
             this.liveData = liveData;
             this.mLastVersion = liveData.mVersion; // 强行将mLastVersion跟mVersion置位相等，就能避免第一次的回调了

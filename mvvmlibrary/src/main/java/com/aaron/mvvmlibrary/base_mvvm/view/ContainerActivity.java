@@ -96,11 +96,7 @@ public class ContainerActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content);
-        if (fragment instanceof BaseMVVMFragment) {
-            if (!((BaseMVVMFragment) fragment).f_isBackPressed()) {
-                super.onBackPressed();
-            }
-        } else if (fragment instanceof MultiBaseMVVMFragment) {
+        if (fragment instanceof MultiBaseMVVMFragment) {
             if (!((MultiBaseMVVMFragment) fragment).f_isBackPressed()) {
                 super.onBackPressed();
             }

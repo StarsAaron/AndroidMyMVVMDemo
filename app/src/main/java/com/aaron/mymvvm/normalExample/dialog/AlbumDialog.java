@@ -11,9 +11,10 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import com.aaron.utilslibrary.BaseDialog;
 import com.aaron.utilslibrary.BaseDialogFragment;
-import com.aaron.mvvmlibrary.adapter.BaseRecyclerViewAdapter;
 import com.aaron.mymvvm.R;
 import com.aaron.mymvvm.normalExample.MyRecyclerViewAdapter;
+import com.aaron.utilslibrary.adapter.BaseRecyclerViewAdapter;
+
 import java.util.List;
 
 /**

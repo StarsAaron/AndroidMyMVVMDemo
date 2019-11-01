@@ -7,13 +7,13 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.aaron.baselibrary.BaseActivity;
-import com.aaron.mvvmlibrary.adapter.BaseFragmentAdapter;
 import com.aaron.mymvvm.R;
 import com.aaron.mymvvm.normalExample.helper.DoubleClickHelper;
 import com.aaron.mymvvm.normalExample.ui.fragment.TestFragmentA;
 import com.aaron.mymvvm.normalExample.ui.fragment.TestFragmentB;
 import com.aaron.mymvvm.normalExample.ui.fragment.TestFragmentC;
 import com.aaron.mymvvm.normalExample.ui.fragment.TestFragmentD;
+import com.aaron.utilslibrary.adapter.BaseFragmentAdapter;
 import com.aaron.utilslibrary.utils.ToastUtils;
 import com.aaron.utilslibrary.utils.android.ActivityUtils;
 import com.aaron.widgetlibrary.layout.NoScrollViewPager;

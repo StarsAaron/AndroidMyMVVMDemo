@@ -54,7 +54,7 @@ publish {
     repoName = 'android-library'//远程仓库名字,不指明，默认是上传到maven
     groupId = 'com.aaron'//jcenter上的路径
     artifactId = 'AndroidUtilsLibrary'//项目名称
-    publishVersion = '1.0.2'//版本号
+    publishVersion = '1.0.3'//版本号
     desc = 'For android utils'//描述，不重要
     website = siteUrl//项目主页
 }

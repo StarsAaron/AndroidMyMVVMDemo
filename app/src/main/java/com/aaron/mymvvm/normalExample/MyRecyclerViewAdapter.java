@@ -5,7 +5,7 @@ import android.view.View;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
 
-import com.aaron.mvvmlibrary.adapter.BaseRecyclerViewAdapter;
+import com.aaron.utilslibrary.adapter.BaseRecyclerViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

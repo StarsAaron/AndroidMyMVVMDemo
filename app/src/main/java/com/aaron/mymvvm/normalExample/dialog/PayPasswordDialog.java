@@ -13,9 +13,9 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.aaron.mvvmlibrary.adapter.BaseRecyclerViewAdapter;
 import com.aaron.mymvvm.R;
 import com.aaron.mymvvm.normalExample.MyRecyclerViewAdapter;
+import com.aaron.utilslibrary.adapter.BaseRecyclerViewAdapter;
 import com.aaron.widgetlibrary.view.PasswordView;
 
 import java.util.Arrays;

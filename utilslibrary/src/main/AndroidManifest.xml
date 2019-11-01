@@ -12,5 +12,12 @@
             android:authorities="${applicationId}.customactivityoncrashinitprovider"
             android:exported="false"
             android:initOrder="101" />
+
+        <activity android:name=".RequestPermissionsActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/MyDialogStyleBottom"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 </manifest>

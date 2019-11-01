@@ -21,7 +21,7 @@ import org.junit.runner.RunWith
  * 说明：
  */
 @RunWith(AndroidJUnit4::class)
-class LoginActivityTest{
+class LoginActivityTest {
 
     @Rule
     val mActivityRule = ActivityTestRule<LoginActivity>(LoginActivity::class.java)
@@ -29,7 +29,7 @@ class LoginActivityTest{
     @Test
     fun useAppContext() {
         // 1.首先，找到ID为editText的view，输入Peter，然后关闭键盘；
-        onView(withId(R.id.et_password)).perform(typeText("123"),closeSoftKeyboard())
+        onView(withId(R.id.et_password)).perform(typeText("123"), closeSoftKeyboard())
         // 2.接下来，点击Say hello!的View，我们没有在布局的XML中为这个Button设置id，因此，通过搜索它上面的文字来找到它；
         onView(withText("登录")).perform(click())
         // 3.最后，将TextView上的文本同预期结果对比，如果一致则测试通过
@@ -40,4 +40,36 @@ class LoginActivityTest{
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         Assert.assertEquals("com.aaron.mymvvm", appContext.packageName)
     }
+
+    @Test
+    fun testEvent() {
+        val scenario = launchActivity<LoginActivity>()
+        scenario.moveToState(State.CREATED)
+    }
+
+    @Test
+    fun testEvent2() {
+        val scenario = launchActivity<MyActivity>()
+        scenario.onActivity { activity ->
+            startActivity(Intent(activity, MyOtherActivity::class.java))
+            activity.handleSwipeToRefresh()
+        }
+        val originalActivityState = scenario.state
+    }
+
+    @Test
+    fun testEvent3() {
+        val scenario = launchActivity<MyActivity>()
+        scenario.recreate()
+    }
+
+    @Test
+    fun testResult() {
+        val scenario = launchActivity<MyActivity>()
+        onView(withId(R.id.finish_button)).perform(click())
+        // Activity under test is now finished.
+        val resultCode = scenario.result.resultCode
+        val resultData = scenario.result.resultData
+    }
+
 }

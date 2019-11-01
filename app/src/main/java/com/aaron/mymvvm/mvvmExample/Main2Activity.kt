@@ -1,6 +1,7 @@
 package com.aaron.mymvvm.mvvmExample
 
 import android.content.Intent
+import android.os.Bundle
 import androidx.lifecycle.Observer
 import com.aaron.mvvmlibrary.base_mvvm.view.MultiBaseMVVMActivity
 import com.aaron.mvvmlibrary.bean.ViewModelData
@@ -25,8 +26,18 @@ class Main2Activity : MultiBaseMVVMActivity<ActivityMain2Binding>() {
         return true
     }
 
-    override fun f_initViewObservable() {
-        val viewModel = getViewModel(LoginViewModel::class.java)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if(RequestPermissionsActivity.lacksPermissions(this,"android.permission.WRITE_EXTERNAL_STORAGE")){
+            RequestPermissionsActivity.requestPermission(this, "android.permission.WRITE_EXTERNAL_STORAGE")
+        }
+
+        f_registorUIBinding(BR.viewModel,f_getViewModel(LoginViewModel::class.java))
+        f_initViewObservable()
+    }
+
+    fun f_initViewObservable() {
+        val viewModel = f_getViewModel(LoginViewModel::class.java)
         KLog.e("viewModel>>>>>>$viewModel")
         viewModel.userName.observe(this, Observer {
             ToastUtils.showShort("名字：$it")
@@ -36,29 +47,6 @@ class Main2Activity : MultiBaseMVVMActivity<ActivityMain2Binding>() {
             ToastUtils.showShort("密码：$it")
             KLog.i("密码：$it")
         })
-    }
-
-
-    /**
-     * 绑定ViewModel
-     * @param map
-     * 设置绑定映射，key为xml文件中的变量名，value为ViewModel
-     * 传入格式为 <BR.variableName></BR.variableName>,vm extends BaseViewModel>
-     */
-    override fun f_initViewModelList(viewModelBindinglist: ArrayList<ViewModelData>?) {
-        viewModelBindinglist?.add(
-            ViewModelData(
-                BR.viewModel,
-                LoginViewModel::class.java
-            )
-        )
-            ?:KLog.w("list: ArrayList<ViewModelData> 为空")
-    }
-
-    override fun f_initData() {
-        if(RequestPermissionsActivity.lacksPermissions(this,"android.permission.WRITE_EXTERNAL_STORAGE")){
-            RequestPermissionsActivity.requestPermission(this, "android.permission.WRITE_EXTERNAL_STORAGE")
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -1,9 +1,10 @@
 package com.aaron.mymvvm.mvvmExample
 
+import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import androidx.lifecycle.Observer
-import com.aaron.mvvmlibrary.base_mvvm.view.BaseMVVMActivity
+import com.aaron.mvvmlibrary.base_mvvm.view.MultiBaseMVVMActivity
 import com.aaron.mymvvm.BR
 import com.aaron.mymvvm.R
 import com.aaron.mymvvm.databinding.ActivityLoginBinding
@@ -11,7 +12,7 @@ import com.aaron.mymvvm.databinding.ActivityLoginBinding
 /**
  * 登录页面
  */
-class LoginActivity : BaseMVVMActivity<ActivityLoginBinding, LoginViewModel>() {
+class LoginActivity : MultiBaseMVVMActivity<ActivityLoginBinding>() {
     /**
      * 获取布局 ID
      *
@@ -25,11 +26,15 @@ class LoginActivity : BaseMVVMActivity<ActivityLoginBinding, LoginViewModel>() {
         return true
     }
 
-    override fun f_initVariableId(): Int {
-        return BR.loginViewModel
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        f_registorUIBinding(BR.loginViewModel,f_getViewModel(LoginViewModel::class.java))
+
+        f_initViewObservable()
     }
 
-    override fun f_initViewObservable() {
+    fun f_initViewObservable() {
+        val viewModel = f_getViewModel(LoginViewModel::class.java)
         viewModel.passwordShowSwitch.observe(this, Observer {
             if (it == true) {
                 //密码可见
@@ -44,12 +49,4 @@ class LoginActivity : BaseMVVMActivity<ActivityLoginBinding, LoginViewModel>() {
             }
         })
     }
-
-    override fun f_initData() {
-
-    }
-
-    override fun f_initOnCreateFirstParam() {
-    }
-
 }
