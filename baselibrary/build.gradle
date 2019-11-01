@@ -35,7 +35,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     // 自定义对话框
-    implementation 'com.aaron:AndroidNiceDialogLibrary:1.0.3'
+    api 'com.aaron:AndroidNiceDialogLibrary:1.0.3'
     implementation project(path: ':utilslibrary')
 }
 /** 以下开始是将Android Library上传到jcenter的相关配置

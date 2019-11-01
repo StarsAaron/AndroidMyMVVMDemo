@@ -23,7 +23,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.cardview:cardview:1.0.0'
+    api 'androidx.cardview:cardview:1.0.0'
 }
 /** 以下开始是将Android Library上传到jcenter的相关配置
  *
